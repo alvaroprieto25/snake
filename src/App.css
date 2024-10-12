@@ -1,38 +1,42 @@
+/* src/App.css */
 .App {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.game-board {
+  position: relative;
+  width: 400px;
+  height: 400px;
+  margin: 20px auto;
+  background-color: #000;
+  border: 1px solid #fff;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.snake-dot, .snake-food {
+  position: absolute;
+  width: 20px;
+  height: 20px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.snake-dot {
+  background-color: green;
+  border-radius: 0;
 }
 
-.App-link {
-  color: #61dafb;
+/* Estilos para la cabeza de la serpiente */
+.snake-head {
+  background-color: darkgreen;
+  border-radius: 35%; /* Hace que la cabeza sea redondeada */
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Estilos para la cola de la serpiente */
+.snake-tail {
+  background-color: green;
+  border-radius: 35%; /* Hace que la cola sea redondeada */
+}
+
+/* Estilos para la comida */
+.snake-food {
+  background-color: red;
+  border-radius: 50%;
 }
