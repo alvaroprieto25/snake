@@ -5,7 +5,7 @@ import GameOverMenu from './GameOverMenu';
 
 const getRandomCoordinates = () => {
   let min = 1;
-  let max = 98;
+  let max = 97;
   let x = Math.floor((Math.random() * (max - min + 1) + min) / 2) * 2;
   let y = Math.floor((Math.random() * (max - min + 1) + min) / 2) * 2;
   return [x, y];
@@ -94,8 +94,47 @@ const GameController = () => {
       }
     };
 
+    const handleTouchStart = (e) => {
+      const touchStartX = e.touches[0].clientX;
+      const touchStartY = e.touches[0].clientY;
+
+      const handleTouchMove = (e) => {
+        const touchEndX = e.touches[0].clientX;
+        const touchEndY = e.touches[0].clientY;
+
+        const deltaX = touchEndX - touchStartX;
+        const deltaY = touchEndY - touchStartY;
+
+        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+          // Movimiento horizontal
+          if (deltaX > 0 && direction !== 'LEFT') {
+            setDirection('RIGHT');
+          } else if (deltaX < 0 && direction !== 'RIGHT') {
+            setDirection('LEFT');
+          }
+        } else {
+          // Movimiento vertical
+          if (deltaY > 0 && direction !== 'UP') {
+            setDirection('DOWN');
+          } else if (deltaY < 0 && direction !== 'DOWN') {
+            setDirection('UP');
+          }
+        }
+
+        // Remover el evento para evitar múltiples llamadas
+        document.removeEventListener('touchmove', handleTouchMove);
+      };
+
+      document.addEventListener('touchmove', handleTouchMove, { passive: true });
+    };
+
     document.addEventListener('keydown', handleKeyPress);
-    return () => document.removeEventListener('keydown', handleKeyPress);
+    document.addEventListener('touchstart', handleTouchStart, { passive: true });
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyPress);
+      document.removeEventListener('touchstart', handleTouchStart);
+    };
   }, [direction]);
 
   // Detección de colisiones con los bordes y consigo misma
