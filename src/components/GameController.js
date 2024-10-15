@@ -4,8 +4,8 @@ import GameBoard from './GameBoard';
 import GameOverMenu from './GameOverMenu';
 
 const getRandomCoordinates = () => {
-  let min = 1;
-  let max = 97;
+  let min = 4;
+  let max = 93;
   let x = Math.floor((Math.random() * (max - min + 1) + min) / 2) * 2;
   let y = Math.floor((Math.random() * (max - min + 1) + min) / 2) * 2;
   return [x, y];
@@ -16,7 +16,7 @@ const GameController = () => {
   const [snakeDots, setSnakeDots] = useState([[0, 0], [2, 0]]);
   const [food, setFood] = useState(getRandomCoordinates());
   const [direction, setDirection] = useState('RIGHT');
-  const [speed, setSpeed] = useState(200);
+  const [speed, setSpeed] = useState(100);
   const [gameOver, setGameOver] = useState(false);
 
   // Efecto para manejar el movimiento de la serpiente y comer
@@ -163,7 +163,7 @@ const GameController = () => {
     setSnakeDots([[0, 0], [2, 0]]);
     setFood(getRandomCoordinates());
     setDirection('RIGHT');
-    setSpeed(200);
+    setSpeed(100);
     setGameOver(false); // Reiniciar el estado de gameOver
   };
 
