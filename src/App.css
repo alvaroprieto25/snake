@@ -1,6 +1,17 @@
 /* src/App.css */
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%; /* Asegúrate de que el body ocupe toda la altura */
+}
+
 .App {
   text-align: center;
+  display: flex;
+  justify-content: center; /* Centra el contenido horizontalmente */
+  align-items: center; /* Centra el contenido verticalmente */
+  height: 100vh; /* Asegúrate de que ocupe toda la altura de la ventana */
 }
 
 .game-board {

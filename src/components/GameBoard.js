@@ -1,9 +1,14 @@
 // src/components/GameBoard.js
 import React from 'react';
+import GameBoardImage from '../assets/game/background.jpg';
 
 const GameBoard = ({ snakeDots, food }) => {
   return (
-    <div className="game-board">
+    <div className="game-board" style={{
+      backgroundImage: `url(${GameBoardImage})`,
+      backgroundSize: 'cover', // O 'contain' según tu preferencia
+      backgroundPosition: 'center',
+    }}>
       {snakeDots.map((dot, i) => {
         let style = {
           left: `${dot[0]}%`,
