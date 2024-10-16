@@ -151,7 +151,7 @@ const GameController = () => {
       // Fix malillo hay que cambiar la representacion de cada casilla
 
       // Si la cabeza toca el borde
-      if (head[0] >= 97 || head[0] < 0 || head[1] >= 97 || head[1] < 0) {
+      if (head[0] >= 100 || head[0] < 0 || head[1] >= 100 || head[1] < 0) {
         setGameOver(true);
       }
 
