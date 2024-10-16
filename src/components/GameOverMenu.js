@@ -1,10 +1,10 @@
 // src/components/GameOverMenu.js
 import React from 'react';
 
-const GameOverMenu = ({ onRestart }) => {
+const GameOverMenu = ({ onRestart, win }) => {
   return (
     <div className="game-over-menu">
-      <h2>Game Over</h2>
+      <h2>{win ? 'Winner' : 'Game Over'}</h2>
       <button className="restart-button" onClick={onRestart}>Reiniciar</button>
     </div>
   );

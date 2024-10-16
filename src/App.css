@@ -31,19 +31,17 @@ html, body {
 
 .snake-dot {
   background-color: green;
-  border-radius: 0;
+  border-radius: 3px;
 }
 
 /* Estilos para la cabeza de la serpiente */
 .snake-head {
   background-color: darkgreen;
-  border-radius: 35%; /* Hace que la cabeza sea redondeada */
 }
 
 /* Estilos para la cola de la serpiente */
 .snake-tail {
   background-color: green;
-  border-radius: 35%; /* Hace que la cola sea redondeada */
 }
 
 /* Estilos para la comida */

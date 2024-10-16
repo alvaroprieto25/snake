@@ -4,16 +4,20 @@ import GameBoard from './GameBoard';
 import GameOverMenu from './GameOverMenu';
 
 const getRandomCoordinates = () => {
-  let min = 1;
-  let max = 92;
-  let x = Math.floor((Math.random() * (max - min + 4) + min) / 4) * 4;
-  let y = Math.floor((Math.random() * (max - min + 4) + min) / 4) * 4;
+  const min = 5;
+  const max = 80;
+  
+  let x = Math.floor(Math.random() * ((max - min) / 5 + 1)) * 5 + min;
+  let y = Math.floor(Math.random() * ((max - min) / 5 + 1)) * 5 + min;
+  
   return [x, y];
 };
 
+
+
 const GameController = () => {
   // Estados del juego
-  const [snakeDots, setSnakeDots] = useState([[0, 0], [2, 0]]);
+  const [snakeDots, setSnakeDots] = useState([[0, 0], [5, 0]]);
   const [food, setFood] = useState(getRandomCoordinates());
   const [rocks, setRocks] =  useState([getRandomCoordinates()]);
   const [direction, setDirection] = useState('RIGHT');
@@ -21,6 +25,7 @@ const GameController = () => {
   const [gameOver, setGameOver] = useState(false);
   const [level, setLevel] = useState(1);
   const [pause, setPause] = useState(false);
+  const [win, setWin] = useState(false);
 
   // Efecto para manejar el movimiento de la serpiente y comer
   useEffect(() => {
@@ -31,16 +36,16 @@ const GameController = () => {
       // Movimiento de la cabeza de la serpiente basado en la dirección
       switch (direction) {
         case 'RIGHT':
-          head = [head[0] + 2, head[1]];
+          head = [head[0] + 5, head[1]];
           break;
         case 'LEFT':
-          head = [head[0] - 2, head[1]];
+          head = [head[0] - 5, head[1]];
           break;
         case 'DOWN':
-          head = [head[0], head[1] + 2];
+          head = [head[0], head[1] + 5];
           break;
         case 'UP':
-          head = [head[0], head[1] - 2];
+          head = [head[0], head[1] - 5];
           break;
         default:
           break;
@@ -54,7 +59,7 @@ const GameController = () => {
     const checkIfEat = () => {
       let head = snakeDots[snakeDots.length - 1];
       if (head[0] === food[0] && head[1] === food[1]) {
-        setFood(getRandomCoordinates());  // Nueva comida
+        setFood(getNextCoordinates());  // Nueva comida
         growSnake();                      // Crecer
       }
     };
@@ -63,14 +68,21 @@ const GameController = () => {
       let newSnake = [...snakeDots];
       newSnake.unshift([]); // Agregar un nuevo segmento a la serpiente
       if(newSnake.length % 5 === 0){
-        setSpeed(speed - 10);
-        setLevel(level + 1);
+        if(level + 1 === 11){
+          setWin(true);
+        } else{
+          setSpeed(speed - 10);
+          setLevel(level + 1);
+          let newRocks = [...rocks];
+          newRocks.push(getNextCoordinates());
+          setRocks(newRocks);
+        }
       }
       setSnakeDots(newSnake);
     };
 
     // Movimiento y comer solo si el juego no ha terminado
-    if (!gameOver && !pause) {
+    if (!gameOver && !pause && !win) {
       const gameInterval = setInterval(() => {
         moveSnake();
         checkIfEat();
@@ -160,7 +172,7 @@ const GameController = () => {
       // Fix malillo hay que cambiar la representacion de cada casilla
 
       // Si la cabeza toca el borde
-      if (head[0] >= 97 || head[0] < 0 || head[1] >= 97 || head[1] < 0) {
+      if (head[0] >= 100 || head[0] < 0 || head[1] >= 100 || head[1] < 0) {
         setGameOver(true);
       }
 
@@ -174,8 +186,8 @@ const GameController = () => {
       });
 
       // Miro si choca con alguna roca
-      rocks.forEach((dot, index) => {
-        if(head[0] === dot[0] && head[1] === dot[1]) {
+      rocks.forEach((rock) => {
+        if(head[0] === rock[0] && head[1] === rock[1]) {
           setGameOver(true);
         }
       });
@@ -183,6 +195,34 @@ const GameController = () => {
 
     checkCollision();
   }, [rocks, snakeDots]);
+
+  const getNextCoordinates = () => {
+  
+    let isValid = false;
+    let x, y;
+  
+    // Función para comprobar si las coordenadas están ocupadas
+    const coordinatesOccupied = (x, y) => {
+      // Comprueba si las coordenadas están en la serpiente, rocas o comida
+      return (
+        snakeDots.some(segment => segment[0] === x && segment[1] === y) ||
+        rocks.some(rock => rock[0] === x && rock[1] === y) ||
+        (food[0] === x && food[1] === y)
+      );
+    };
+  
+    // Genera nuevas coordenadas hasta que sean válidas
+    while (!isValid) {
+      [x, y] = getRandomCoordinates();
+  
+      // Verifica si las coordenadas no están ocupadas
+      if (!coordinatesOccupied(x, y)) {
+        isValid = true;
+      }
+    }
+  
+    return [x, y];
+  };
 
   // Reiniciar el juego
   const restartGame = () => {
@@ -198,11 +238,10 @@ const GameController = () => {
   return (
     <div>
       <h1>SNAKE GAME</h1>
-      <h2>Level {level}</h2>
+      { !win && <h2>Level {level}</h2> }
       { pause && <span>paused</span> }
-      
-      {gameOver ? (
-        <GameOverMenu onRestart={restartGame} />
+      {gameOver || win ? (
+        <GameOverMenu onRestart={restartGame} win={win} />
       ) : (
         <GameBoard snakeDots={snakeDots} food={food} rocks={rocks} />
       )}
