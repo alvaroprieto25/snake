@@ -23,7 +23,7 @@ html, body {
   border: 1px solid #fff;
 }
 
-.snake-dot, .snake-food {
+.snake-dot, .snake-food, .rocks {
   position: absolute;
   width: 20px;
   height: 20px;
@@ -50,4 +50,18 @@ html, body {
 .snake-food {
   background-color: red;
   border-radius: 50%;
+}
+
+.restart-button{
+  color: rgb(182, 185, 6);
+  background-color: black;
+  border-radius: 15px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.rocks {
+  background-color: gray;
 }
