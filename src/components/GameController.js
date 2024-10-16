@@ -4,8 +4,8 @@ import GameBoard from './GameBoard';
 import GameOverMenu from './GameOverMenu';
 
 const getRandomCoordinates = () => {
-  let min = 4;
-  let max = 93;
+  let min = 1;
+  let max = 99;
   let x = Math.floor((Math.random() * (max - min + 1) + min) / 2) * 2;
   let y = Math.floor((Math.random() * (max - min + 1) + min) / 2) * 2;
   return [x, y];
@@ -15,9 +15,11 @@ const GameController = () => {
   // Estados del juego
   const [snakeDots, setSnakeDots] = useState([[0, 0], [2, 0]]);
   const [food, setFood] = useState(getRandomCoordinates());
+  const [rocks, setRocks] =  useState([getRandomCoordinates()]);
   const [direction, setDirection] = useState('RIGHT');
   const [speed, setSpeed] = useState(100);
   const [gameOver, setGameOver] = useState(false);
+  const [level, setLevel] = useState(1);
 
   // Efecto para manejar el movimiento de la serpiente y comer
   useEffect(() => {
@@ -47,7 +49,7 @@ const GameController = () => {
       dots.shift();    // Quitamos la cola
       setSnakeDots(dots);
     };
-
+    
     const checkIfEat = () => {
       let head = snakeDots[snakeDots.length - 1];
       if (head[0] === food[0] && head[1] === food[1]) {
@@ -55,10 +57,14 @@ const GameController = () => {
         growSnake();                      // Crecer
       }
     };
-
+    
     const growSnake = () => {
       let newSnake = [...snakeDots];
       newSnake.unshift([]); // Agregar un nuevo segmento a la serpiente
+      if(newSnake.length % 5 === 0){
+        setSpeed(speed - 10);
+        setLevel(level + 1);
+      }
       setSnakeDots(newSnake);
     };
 
@@ -142,10 +148,14 @@ const GameController = () => {
     const checkCollision = () => {
       let head = snakeDots[snakeDots.length - 1];
 
+      // Fix malillo hay que cambiar la representacion de cada casilla
+
       // Si la cabeza toca el borde
-      if (head[0] >= 100 || head[0] < 0 || head[1] >= 100 || head[1] < 0) {
+      if (head[0] >= 97 || head[0] < 0 || head[1] >= 97 || head[1] < 0) {
         setGameOver(true);
       }
+
+      // Futura mejora mabstraer esto a otra funcion
 
       // Si la cabeza toca su propio cuerpo
       snakeDots.forEach((dot, index) => {
@@ -153,27 +163,37 @@ const GameController = () => {
           setGameOver(true);
         }
       });
+
+      // Miro si choca con alguna roca
+      rocks.forEach((dot, index) => {
+        if(head[0] === dot[0] && head[1] === dot[1]) {
+          setGameOver(true);
+        }
+      });
     };
 
     checkCollision();
-  }, [snakeDots]);
+  }, [rocks, snakeDots]);
 
   // Reiniciar el juego
   const restartGame = () => {
     setSnakeDots([[0, 0], [2, 0]]);
     setFood(getRandomCoordinates());
+    setRocks([getRandomCoordinates()]);
     setDirection('RIGHT');
+    setLevel(1);
     setSpeed(100);
-    setGameOver(false); // Reiniciar el estado de gameOver
+    setGameOver(false);
   };
 
   return (
     <div>
-      <h1>Snake Game</h1>
+      <h1>SNAKE GAME</h1>
+      <h2>Level {level}</h2>
       {gameOver ? (
         <GameOverMenu onRestart={restartGame} />
       ) : (
-        <GameBoard snakeDots={snakeDots} food={food} />
+        <GameBoard snakeDots={snakeDots} food={food} rocks={rocks} />
       )}
     </div>
   );

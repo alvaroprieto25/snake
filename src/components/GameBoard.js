@@ -2,11 +2,11 @@
 import React from 'react';
 import GameBoardImage from '../assets/game/background.jpg';
 
-const GameBoard = ({ snakeDots, food }) => {
+const GameBoard = ({ snakeDots, food, rocks }) => {
   return (
     <div className="game-board" style={{
       backgroundImage: `url(${GameBoardImage})`,
-      backgroundSize: 'cover', // O 'contain' según tu preferencia
+      backgroundSize: 'cover',
       backgroundPosition: 'center',
     }}>
       {snakeDots.map((dot, i) => {
@@ -26,6 +26,10 @@ const GameBoard = ({ snakeDots, food }) => {
       })}
 
       <div className="snake-food" style={{ left: `${food[0]}%`, top: `${food[1]}%` }}></div>
+
+      {rocks.map((dot, i) => 
+        <div className="rocks" style={{ left: `${dot[0]}%`, top: `${dot[1]}%` }}></div>
+      )}
     </div>
   );
 };
