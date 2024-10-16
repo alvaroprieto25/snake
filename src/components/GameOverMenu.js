@@ -5,7 +5,7 @@ const GameOverMenu = ({ onRestart, win }) => {
   return (
     <div className="game-over-menu">
       <h2>{win ? 'Winner' : 'Game Over'}</h2>
-      <button className="restart-button" onClick={onRestart}>Reiniciar</button>
+      <button autoFocus className="restart-button" onClick={onRestart}>Reiniciar</button>
     </div>
   );
 };

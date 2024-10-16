@@ -113,40 +113,6 @@ const GameController = () => {
       }
     };
 
-    const handleTouchStart = (e) => {
-      const touchStartX = e.touches[0].clientX;
-      const touchStartY = e.touches[0].clientY;
-
-      const handleTouchMove = (e) => {
-        const touchEndX = e.touches[0].clientX;
-        const touchEndY = e.touches[0].clientY;
-
-        const deltaX = touchEndX - touchStartX;
-        const deltaY = touchEndY - touchStartY;
-
-        if (Math.abs(deltaX) > Math.abs(deltaY)) {
-          // Movimiento horizontal
-          if (deltaX > 0 && direction !== 'LEFT') {
-            setDirection('RIGHT');
-          } else if (deltaX < 0 && direction !== 'RIGHT') {
-            setDirection('LEFT');
-          }
-        } else {
-          // Movimiento vertical
-          if (deltaY > 0 && direction !== 'UP') {
-            setDirection('DOWN');
-          } else if (deltaY < 0 && direction !== 'DOWN') {
-            setDirection('UP');
-          }
-        }
-
-        // Remover el evento para evitar múltiples llamadas
-        document.removeEventListener('touchmove', handleTouchMove);
-      };
-
-      document.addEventListener('touchmove', handleTouchMove, { passive: true });
-    };
-
     const handlePause = (e) => {
       if(e.keyCode === 80){
         setPause(!pause);
@@ -155,12 +121,10 @@ const GameController = () => {
 
     document.addEventListener('keydown', handlePause);
     document.addEventListener('keydown', handleKeyPress);
-    document.addEventListener('touchstart', handleTouchStart, { passive: true });
 
     return () => {
       document.removeEventListener('keydown', handleKeyPress);
       document.removeEventListener('keydown', handlePause);
-      document.removeEventListener('touchstart', handleTouchStart);
     };
   }, [direction, pause]);
 
@@ -226,13 +190,15 @@ const GameController = () => {
 
   // Reiniciar el juego
   const restartGame = () => {
-    setSnakeDots([[0, 0], [2, 0]]);
+    setSnakeDots([[0, 0], [5, 0]]);
     setFood(getRandomCoordinates());
     setRocks([getRandomCoordinates()]);
     setDirection('RIGHT');
     setLevel(1);
     setSpeed(100);
     setGameOver(false);
+    setPause(false);
+    setWin(false);
   };
 
   return (
