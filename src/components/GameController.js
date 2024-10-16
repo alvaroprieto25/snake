@@ -5,9 +5,9 @@ import GameOverMenu from './GameOverMenu';
 
 const getRandomCoordinates = () => {
   let min = 1;
-  let max = 99;
-  let x = Math.floor((Math.random() * (max - min + 1) + min) / 2) * 2;
-  let y = Math.floor((Math.random() * (max - min + 1) + min) / 2) * 2;
+  let max = 92;
+  let x = Math.floor((Math.random() * (max - min + 4) + min) / 4) * 4;
+  let y = Math.floor((Math.random() * (max - min + 4) + min) / 4) * 4;
   return [x, y];
 };
 
@@ -20,6 +20,7 @@ const GameController = () => {
   const [speed, setSpeed] = useState(100);
   const [gameOver, setGameOver] = useState(false);
   const [level, setLevel] = useState(1);
+  const [pause, setPause] = useState(false);
 
   // Efecto para manejar el movimiento de la serpiente y comer
   useEffect(() => {
@@ -69,7 +70,7 @@ const GameController = () => {
     };
 
     // Movimiento y comer solo si el juego no ha terminado
-    if (!gameOver) {
+    if (!gameOver && !pause) {
       const gameInterval = setInterval(() => {
         moveSnake();
         checkIfEat();
@@ -77,7 +78,7 @@ const GameController = () => {
 
       return () => clearInterval(gameInterval);
     }
-  }, [snakeDots, direction, speed, food, gameOver]);
+  }, [snakeDots, direction, speed, food, gameOver, pause]);
 
   // Detección de dirección con el teclado
   useEffect(() => {
@@ -134,14 +135,22 @@ const GameController = () => {
       document.addEventListener('touchmove', handleTouchMove, { passive: true });
     };
 
+    const handlePause = (e) => {
+      if(e.keyCode === 80){
+        setPause(!pause);
+      }
+    }
+
+    document.addEventListener('keydown', handlePause);
     document.addEventListener('keydown', handleKeyPress);
     document.addEventListener('touchstart', handleTouchStart, { passive: true });
 
     return () => {
       document.removeEventListener('keydown', handleKeyPress);
+      document.removeEventListener('keydown', handlePause);
       document.removeEventListener('touchstart', handleTouchStart);
     };
-  }, [direction]);
+  }, [direction, pause]);
 
   // Detección de colisiones con los bordes y consigo misma
   useEffect(() => {
@@ -151,7 +160,7 @@ const GameController = () => {
       // Fix malillo hay que cambiar la representacion de cada casilla
 
       // Si la cabeza toca el borde
-      if (head[0] >= 100 || head[0] < 0 || head[1] >= 100 || head[1] < 0) {
+      if (head[0] >= 97 || head[0] < 0 || head[1] >= 97 || head[1] < 0) {
         setGameOver(true);
       }
 
@@ -190,6 +199,8 @@ const GameController = () => {
     <div>
       <h1>SNAKE GAME</h1>
       <h2>Level {level}</h2>
+      { pause && <span>paused</span> }
+      
       {gameOver ? (
         <GameOverMenu onRestart={restartGame} />
       ) : (
