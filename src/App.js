@@ -8,7 +8,7 @@ function App() {
   return (
     <div className="App" style={{
       backgroundImage: `url(${backgroundImage})`,
-      backgroundSize: 'cover', // O 'contain' según tu preferencia
+      backgroundSize: 'cover',
       height: '100vh', // Asegúrate de que ocupe toda la altura
       backgroundPosition: 'center',
     }}>
