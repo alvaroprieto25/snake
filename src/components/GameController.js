@@ -71,7 +71,9 @@ const GameController = () => {
         if(level + 1 === 11){
           setWin(true);
         } else{
-          setSpeed(speed - 10);
+          if(speed > 30){
+            setSpeed(speed - 10);
+          }
           setLevel(level + 1);
           let newRocks = [...rocks];
           newRocks.push(getNextCoordinates());
