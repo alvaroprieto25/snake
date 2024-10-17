@@ -26,6 +26,7 @@ const GameController = () => {
   const [level, setLevel] = useState(1);
   const [pause, setPause] = useState(false);
   const [win, setWin] = useState(false);
+  const [moveCompleted, setMoveCompleted] = useState(true);
 
   // Efecto para manejar el movimiento de la serpiente y comer
   useEffect(() => {
@@ -54,6 +55,7 @@ const GameController = () => {
       dots.push(head); // Añadimos la nueva cabeza
       dots.shift();    // Quitamos la cola
       setSnakeDots(dots);
+      setMoveCompleted(true);
     };
     
     const checkIfEat = () => {
@@ -92,11 +94,13 @@ const GameController = () => {
 
       return () => clearInterval(gameInterval);
     }
-  }, [snakeDots, direction, speed, food, gameOver, pause]);
+  }, [snakeDots, direction, speed, food, gameOver, pause, moveCompleted]);
 
   // Detección de dirección con el teclado
   useEffect(() => {
     const handleKeyPress = (e) => {
+      if(!moveCompleted) return;
+
       switch (e.keyCode) {
         case 38:
           if (direction !== 'DOWN') setDirection('UP');
@@ -113,6 +117,8 @@ const GameController = () => {
         default:
           break;
       }
+
+      setMoveCompleted(false);
     };
 
     const handlePause = (e) => {
@@ -128,7 +134,7 @@ const GameController = () => {
       document.removeEventListener('keydown', handleKeyPress);
       document.removeEventListener('keydown', handlePause);
     };
-  }, [direction, pause]);
+  }, [direction, pause, moveCompleted]);
 
   // Detección de colisiones con los bordes y consigo misma
   useEffect(() => {
