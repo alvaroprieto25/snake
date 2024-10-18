@@ -27,6 +27,9 @@ const GameController = () => {
   const [pause, setPause] = useState(false);
   const [win, setWin] = useState(false);
   const [moveCompleted, setMoveCompleted] = useState(true);
+  const [score, setScore] = useState(0);
+  const [record, setRecord] = useState(localStorage.getItem('record'));
+  const [isRecord, setIsRecord] = useState(false);
 
   // Efecto para manejar el movimiento de la serpiente y comer
   useEffect(() => {
@@ -77,12 +80,14 @@ const GameController = () => {
             setSpeed(speed - 10);
           }
           setLevel(level + 1);
+          setScore(score+50);
           let newRocks = [...rocks];
           newRocks.push(getNextCoordinates());
           setRocks(newRocks);
         }
       }
       setSnakeDots(newSnake);
+      setScore(score+5);
     };
 
     // Movimiento y comer solo si el juego no ha terminado
@@ -146,6 +151,11 @@ const GameController = () => {
       // Si la cabeza toca el borde
       if (head[0] >= 100 || head[0] < 0 || head[1] >= 100 || head[1] < 0) {
         setGameOver(true);
+        if(score > record){
+          setRecord(score);
+          setIsRecord(true);
+          localStorage.setItem('record', score);
+        }
       }
 
       // Futura mejora mabstraer esto a otra funcion
@@ -154,6 +164,11 @@ const GameController = () => {
       snakeDots.forEach((dot, index) => {
         if (index !== snakeDots.length - 1 && head[0] === dot[0] && head[1] === dot[1]) {
           setGameOver(true);
+          if(score > record){
+            setRecord(score);
+            setIsRecord(true);
+            localStorage.setItem('record', score);
+          }
         }
       });
 
@@ -161,6 +176,11 @@ const GameController = () => {
       rocks.forEach((rock) => {
         if(head[0] === rock[0] && head[1] === rock[1]) {
           setGameOver(true);
+          if(score > record){
+            setRecord(score);
+            setIsRecord(true);
+            localStorage.setItem('record', score);
+          }
         }
       });
     };
@@ -207,15 +227,19 @@ const GameController = () => {
     setGameOver(false);
     setPause(false);
     setWin(false);
+    setScore(0);
+    setIsRecord(false);
   };
 
   return (
     <div>
       <h1>SNAKE GAME</h1>
       { !win && <h2>Level {level}</h2> }
+      { !gameOver && <h3>Your Score</h3> }
+      { !gameOver && <h3>{score}</h3> }
       { pause && <span>paused</span> }
       {gameOver || win ? (
-        <GameOverMenu onRestart={restartGame} win={win} />
+        <GameOverMenu onRestart={restartGame} win={win} isRecord={isRecord} score={score} />
       ) : (
         <GameBoard snakeDots={snakeDots} food={food} rocks={rocks} />
       )}
