@@ -231,6 +231,16 @@ const GameController = () => {
     setIsRecord(false);
   };
 
+  const shareScore = async () => {
+    //copiar al portapapeles un mensaje
+    try{
+      await navigator.clipboard.writeText(`SNAKE GAME\nHas alcanzado el nivel: ${level}.\nTu puntuacion es de ${score}.\nSi tu tambien quieres juegar, hazlo ahora en:\nhttps://alvaroprieto25.github.io/snake`);
+      alert('Mensaje copiado!');
+    } catch(err) {
+      console.error('Error al copiar al portapapeles.');
+    }
+  };
+
   return (
     <div>
       <h1>SNAKE GAME</h1>
@@ -239,7 +249,7 @@ const GameController = () => {
       { !gameOver && <h3>{score}</h3> }
       { pause && <span>paused</span> }
       {gameOver || win ? (
-        <GameOverMenu onRestart={restartGame} win={win} isRecord={isRecord} score={score} />
+        <GameOverMenu onRestart={restartGame} onShare={shareScore} win={win} isRecord={isRecord} score={score} />
       ) : (
         <GameBoard snakeDots={snakeDots} food={food} rocks={rocks} />
       )}

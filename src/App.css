@@ -52,7 +52,7 @@ html, body {
   border-radius: 50%;
 }
 
-.restart-button{
+.restart-button, .share-button{
   color: rgb(182, 185, 6);
   background-color: black;
   border-radius: 15px;
@@ -60,6 +60,7 @@ html, body {
   padding-right: 10px;
   padding-top: 5px;
   padding-bottom: 5px;
+  margin: 5px;
 }
 
 .rocks {
