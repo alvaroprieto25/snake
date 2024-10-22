@@ -12,11 +12,10 @@ function App() {
     <div className={isMobile ? 'App-mobile' : 'App'} style={{
       backgroundImage: `url(${backgroundImage})`,
       backgroundSize: 'cover',
-      height: '100vh', // Asegúrate de que ocupe toda la altura
+      height: '100vh',
       backgroundPosition: 'center',
     }}>
     <GameController />
-    {/* {isMobile ? <div><h1>Coming Soon</h1><h2>Mobile Version</h2></div> : <GameController />} */}
     </div>
   );
 }
