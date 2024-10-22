@@ -9,13 +9,14 @@ function App() {
   const isMobile = useDeviceType();
 
   return (
-    <div className="App" style={{
+    <div className={isMobile ? 'App-mobile' : 'App'} style={{
       backgroundImage: `url(${backgroundImage})`,
       backgroundSize: 'cover',
       height: '100vh', // Asegúrate de que ocupe toda la altura
       backgroundPosition: 'center',
     }}>
-    {isMobile ? <div><h1>Coming Soon</h1><h2>Mobile Version</h2></div> : <GameController />}
+    <GameController />
+    {/* {isMobile ? <div><h1>Coming Soon</h1><h2>Mobile Version</h2></div> : <GameController />} */}
     </div>
   );
 }

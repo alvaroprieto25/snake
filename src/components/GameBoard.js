@@ -1,10 +1,12 @@
 // src/components/GameBoard.js
 import React from 'react';
 import GameBoardImage from '../assets/game/background.jpg';
+import useDeviceType from '../utils/Device';
 
 const GameBoard = ({ snakeDots, food, rocks }) => {
+  const isMobile = useDeviceType();
   return (
-    <div className="game-board" style={{
+    <div className={isMobile ? 'game-board-mobile' : 'game-board'} style={{
       backgroundImage: `url(${GameBoardImage})`,
       backgroundSize: 'cover',
       backgroundPosition: 'center',

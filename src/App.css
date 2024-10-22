@@ -16,10 +16,27 @@ html, body {
   overflow-y: hidden;
 }
 
+.App-mobile {
+  text-align: center;
+  display: flex;
+  justify-content: center; /* Centra el contenido horizontalmente */
+  height: 100vh; /* Asegúrate de que ocupe toda la altura de la ventana */
+  overflow-y:auto;
+}
+
 .game-board {
   position: relative;
   width: 400px;
   height: 400px;
+  margin: 20px auto;
+  background-color: #000;
+  border: 1px solid #fff;
+}
+
+.game-board-mobile {
+  position: relative;
+  width: 300px;
+  height: 300px;
   margin: 20px auto;
   background-color: #000;
   border: 1px solid #fff;
