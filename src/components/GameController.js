@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import GameBoard from './GameBoard';
 import GameOverMenu from './GameOverMenu';
+import useDeviceType from '../utils/Device';
+
 
 const getRandomCoordinates = () => {
   const min = 5;
@@ -16,6 +18,8 @@ const getRandomCoordinates = () => {
 
 
 const GameController = () => {
+  const isMobile = useDeviceType();
+
   // Estados del juego
   const [snakeDots, setSnakeDots] = useState([[0, 0], [5, 0]]);
   const [food, setFood] = useState(getRandomCoordinates());
@@ -140,6 +144,56 @@ const GameController = () => {
       document.removeEventListener('keydown', handlePause);
     };
   }, [direction, pause, moveCompleted]);
+
+  // Detección de gestos táctiles (swipes)
+  useEffect(() => {
+    let touchStartX = 0;
+    let touchStartY = 0;
+
+    const handleTouchStart = (e) => {
+      const touch = e.touches[0];
+      touchStartX = touch.clientX;
+      touchStartY = touch.clientY;
+    };
+
+    const handleTouchEnd = (e) => {
+      if (!moveCompleted) return;
+
+      const touch = e.changedTouches[0];
+      const touchEndX = touch.clientX;
+      const touchEndY = touch.clientY;
+
+      const deltaX = touchEndX - touchStartX;
+      const deltaY = touchEndY - touchStartY;
+
+      // Determinar la dirección del swipe
+      if (Math.abs(deltaX) > Math.abs(deltaY)) {
+        // Swipe horizontal
+        if (deltaX > 0 && direction !== 'LEFT') {
+          setDirection('RIGHT');
+        } else if (deltaX < 0 && direction !== 'RIGHT') {
+          setDirection('LEFT');
+        }
+      } else {
+        // Swipe vertical
+        if (deltaY > 0 && direction !== 'UP') {
+          setDirection('DOWN');
+        } else if (deltaY < 0 && direction !== 'DOWN') {
+          setDirection('UP');
+        }
+      }
+
+      setMoveCompleted(false);
+    };
+
+    document.addEventListener('touchstart', handleTouchStart);
+    document.addEventListener('touchend', handleTouchEnd);
+
+    return () => {
+      document.removeEventListener('touchstart', handleTouchStart);
+      document.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, [direction, moveCompleted]);
 
   // Detección de colisiones con los bordes y consigo misma
   useEffect(() => {
