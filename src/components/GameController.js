@@ -111,16 +111,16 @@ const GameController = () => {
       if(!moveCompleted) return;
 
       switch (e.keyCode) {
-        case 38:
+        case 38, 83:
           if (direction !== 'DOWN') setDirection('UP');
           break;
-        case 40:
+        case 40, 87:
           if (direction !== 'UP') setDirection('DOWN');
           break;
-        case 37:
+        case 37, 68:
           if (direction !== 'RIGHT') setDirection('LEFT');
           break;
-        case 39:
+        case 39, 65:
           if (direction !== 'LEFT') setDirection('RIGHT');
           break;
         default:
